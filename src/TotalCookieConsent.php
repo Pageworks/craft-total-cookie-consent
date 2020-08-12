@@ -81,14 +81,6 @@ class TotalCookieConsent extends Plugin
         );
 
         Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['cpActionTrigger1'] = 'total-cookie-consent/default/do-something';
-            }
-        );
-
-        Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
             function (Event $event) {
@@ -98,14 +90,9 @@ class TotalCookieConsent extends Plugin
             }
         );
 
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this) {
-                }
-            }
-        );
+        Craft::$app->view->hook('total-cookie-consent', function(array &$context) {
+            return TotalCookieConsent::getInstance()->totalCookieConsentService->renderBanner();
+        });
 
         Craft::info(
             Craft::t(

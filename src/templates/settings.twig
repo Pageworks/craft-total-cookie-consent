@@ -15,12 +15,121 @@
 
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\TotalCookieConsentAsset") %}
+{{ forms.selectField({
+    label: 'Default Consent Banner',
+    instructions: 'All users will be presented the default banner unless their location requires something different.',
+    id: 'defaultConsentType',
+    name: 'defaultConsentType',
+    value: settings['defaultConsentType'],
+    options: {
+        none: 'None'|t('total-cookie-consent'),
+        implied: 'Implied'|t('total-cookie-consent'),
+        explicit: 'Explicit'|t('total-cookie-consent'),
+    }
+})
+}}
 
 {{ forms.textField({
-    label: 'Some Field',
-    instructions: 'Enter some setting here.',
-    id: 'someAttribute',
-    name: 'someAttribute',
-    value: settings['someAttribute']})
+        label: 'API Key',
+        instructions: 'To enable geolocation based banners get an API key from https://ipapi.com/',
+        id: 'ipapiKey',
+        name: 'ipapiKey',
+        value: settings['ipapiKey']
+    })
+}}
+
+{{ forms.lightswitchField({
+        label: 'GDPR',
+        instructions: 'All EU visitors will recieve the explicit banner.',
+        id: 'gdprBanner',
+        name: 'gdprBanner',
+        on: settings['gdprBanner']
+    })
+}}
+
+{{ forms.textField({
+    label: 'Implied Consent Heading',
+    id: 'impliedHeading',
+    name: 'impliedHeading',
+    value: settings['impliedHeading']
+})
+}}
+{{ forms.textareaField({
+    label: 'Implied Consent Copy',
+    id: 'impliedCopy',
+    name: 'impliedCopy',
+    value: settings['impliedCopy']
+})
+}}
+
+{{ forms.textField({
+    label: 'Explicit Consent Heading',
+    id: 'explicitHeading',
+    name: 'explicitHeading',
+    value: settings['explicitHeading']
+})
+}}
+{{ forms.textareaField({
+    label: 'Explicit Consent Copy',
+    id: 'explicitCopy',
+    name: 'explicitCopy',
+    value: settings['explicitCopy']
+})
+}}
+
+{{ forms.editableTableField({
+    label: 'Consent Types',
+    instructions: 'What types of cookie consent can your visitors give?',
+    id: 'consentTypes',
+    name: 'consentTypes',
+    rows: settings['consentTypes'],
+    cols: {
+        handle: {
+            heading: 'Handle',
+            type: 'text',
+        },
+        name: {
+            heading: 'Name',
+            type: 'text',
+        },
+        defaultOn: {
+            heading: 'Default On',
+            type: 'lightswitch',
+        },
+        required: {
+            heading: 'Required',
+            type: 'lightswitch',
+        }
+    }
+})
+}}
+
+{{ forms.editableTableField({
+    label: 'Explicit Consent Locations',
+    instructions: 'Alpha-2 ISO codes of the countries that must recieve the explicit banner.',
+    id: 'explicitConsentTable',
+    name: 'explicitConsentTable',
+    rows: settings['explicitConsentTable'],
+    cols: {
+        handle: {
+            heading: 'ISO Code',
+            type: 'text',
+        }
+    }
+})
+}}
+
+{{ forms.editableTableField({
+    label: 'Implied Consent Locations',
+    instructions: 'Alpha-2 ISO codes of the countries that must recieve the implied banner.',
+    id: 'impledConsentTable',
+    name: 'impledConsentTable',
+    rows: settings['impledConsentTable'],
+    cols: {
+        handle: {
+            heading: 'ISO Code',
+            type: 'text',
+        }
+    }
+})
 }}

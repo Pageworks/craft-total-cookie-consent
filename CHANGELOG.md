@@ -6,3 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+### Added
+
+- plugin settings
+- banner template hook `{% hook 'total-cookie-consent' %}`
+- default implied banner functionality
+- geolocation lookup via ipapi
+- explicit & implied country code lookup functionality

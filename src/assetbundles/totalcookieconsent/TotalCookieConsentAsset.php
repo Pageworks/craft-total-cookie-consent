@@ -31,10 +31,6 @@ class TotalCookieConsentAsset extends AssetBundle
     {
         $this->sourcePath = "@page8/totalcookieconsent/assetbundles/totalcookieconsent/dist";
 
-        $this->depends = [
-            CpAsset::class,
-        ];
-
         $this->js = [
             'js/TotalCookieConsent.js',
         ];

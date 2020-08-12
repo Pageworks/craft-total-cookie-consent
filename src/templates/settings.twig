@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Total Cookie Consent plugin for Craft CMS 3.x
+ *
+ * Total Cookie Consent Settings.twig
+ *
+ * @author    Pageworks
+ * @copyright Copyright (c) 2020 Pageworks
+ * @link      https://www.page.works/
+ * @package   TotalCookieConsent
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\TotalCookieConsentAsset") %}
+
+{{ forms.textField({
+    label: 'Some Field',
+    instructions: 'Enter some setting here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: settings['someAttribute']})
+}}

@@ -1,0 +1,49 @@
+{
+    "name": "page8/total-cookie-consent",
+    "description": "The plugin provides total control over the cookie consent collection process and includes three consent collection options: No Consent, Implied Consent, and Explicit Consent. Collection methods can be tailored per country or state to provide an optimal non-intrusive user experience.",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "total cookie consent"
+    ],
+    "support": {
+        "docs": "https://github.com/pageworks/total-cookie-consent/blob/master/README.md",
+        "issues": "https://github.com/pageworks/total-cookie-consent/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pageworks",
+            "homepage": "https://www.page.works/"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0"
+    },
+    "require-dev": {
+      "craftcms/cms": "^3.2.0",
+      "codeception/codeception": "^3.0",
+      "vlucas/phpdotenv": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "page8\\totalcookieconsent\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Total Cookie Consent",
+        "handle": "total-cookie-consent",
+        "developer": "Pageworks",
+        "developerUrl": "https://www.page.works/",
+        "documentationUrl": "https://github.com/pageworks/total-cookie-consent/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/pageworks/total-cookie-consent/master/CHANGELOG.md",
+        "components": {
+            "totalCookieConsentService": "page8\\totalcookieconsent\\services\\TotalCookieConsentService"
+        },
+        "class": "page8\\totalcookieconsent\\TotalCookieConsent"
+    }
+}

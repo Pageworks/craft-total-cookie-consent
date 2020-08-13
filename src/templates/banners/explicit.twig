@@ -1,4 +1,8 @@
 <form method="POST" class="total-cookie-consent-banner" role="alertdialog">
+    
+    {{ csrfInput() }}
+    {{ actionInput('total-cookie-consent/default/save') }}
+
     <h2>{{ "cookie settings"|t('total-cookie-consent') }}</h2>
     <div style="padding:32px;">
         {% for type in consentTypes %}
@@ -12,7 +16,8 @@
                     {% endif %}
                     {% if type.required %}
                         disabled
-                    {% endif %}
+                    {% endif %} 
+                    value="1"
                 />
                 <label for="{{ type.handle }}-input">
                     <i></i>

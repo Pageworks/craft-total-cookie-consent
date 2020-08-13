@@ -24,16 +24,8 @@ class TotalCookieConsentVariable
     // Public Methods
     // =========================================================================
 
-    /**
-     * @param null $optional
-     * @return string
-     */
-    public function exampleVariable($optional = null)
+    public function getConsent()
     {
-        $result = "And away we go to the Twig template...";
-        if ($optional) {
-            $result = "I'm feeling optional today...";
-        }
-        return $result;
+        return TotalCookieConsent::getInstance()->totalCookieConsentService->getConsentResponse();
     }
 }

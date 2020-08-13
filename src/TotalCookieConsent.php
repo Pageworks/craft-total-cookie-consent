@@ -73,20 +73,12 @@ class TotalCookieConsent extends Plugin
         self::$plugin = $this;
 
         Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['siteActionTrigger1'] = 'total-cookie-consent/default';
-            }
-        );
-
-        Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
             function (Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
-                $variable->set('totalCookieConsent', TotalCookieConsentVariable::class);
+                $variable->set('tcc', TotalCookieConsentVariable::class);
             }
         );
 

@@ -2,7 +2,7 @@
     padding: 16px 16px 12px;
     background-color: #1A202C;
     color: #fff;
-    box-shadow: 0 20px -25px -5px rgba(0, 0, 0, 0.1), 0 10px -10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 -20px 25px -5px rgba(0, 0, 0, 0.1), 0 -10px 10px -5px rgba(0, 0, 0, 0.04);
     max-height: 100vh;
     overflow-y: auto;
     box-sizing: border-box;

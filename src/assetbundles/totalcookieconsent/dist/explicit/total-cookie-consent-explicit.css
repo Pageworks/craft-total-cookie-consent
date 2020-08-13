@@ -104,6 +104,14 @@ lightswitch-component label h3{
     margin-bottom: 8px;
     color: #2D3748;
 }
+lightswitch-component label h3 span{
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px;
+    color: #4A5568;
+    font-weight: 400;
+}
 lightswitch-component label p{
     font-size: 14px !important;
     display: block;
@@ -128,7 +136,7 @@ lightswitch-component label i {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    margin-right: 24px;
+    margin-right: 32px;
 }
 lightswitch-component label i::before {
     content: "";

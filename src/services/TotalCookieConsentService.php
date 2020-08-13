@@ -80,6 +80,7 @@ class TotalCookieConsentService extends Component
             {
                 $ret[$type['handle']] = false;
             }
+            $this->renderBanner();
         }
 
         return $ret;

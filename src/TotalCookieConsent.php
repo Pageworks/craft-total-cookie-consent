@@ -82,10 +82,6 @@ class TotalCookieConsent extends Plugin
             }
         );
 
-        Craft::$app->view->hook('total-cookie-consent', function(array &$context) {
-            return TotalCookieConsent::getInstance()->totalCookieConsentService->renderBanner();
-        });
-
         Craft::info(
             Craft::t(
                 'total-cookie-consent',

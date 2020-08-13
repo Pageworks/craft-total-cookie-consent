@@ -24,7 +24,7 @@ class TotalCookieConsentVariable
     // Public Methods
     // =========================================================================
 
-    public function getConsent()
+    public function consent()
     {
         return TotalCookieConsent::getInstance()->totalCookieConsentService->getConsentResponse();
     }

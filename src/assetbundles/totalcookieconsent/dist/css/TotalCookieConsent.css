@@ -5,9 +5,11 @@
     width: 100vw;
     z-index: 999999;
     padding: 16px;
+    pointer-events: none;
 }
 
 .total-cookie-consent-banner{
+    pointer-events: all;
     padding: 24px 32px;
     background-color: #fff;
     border-radius: 8px;
@@ -16,9 +18,10 @@
     overflow-y: auto;
     box-sizing: border-box;
     display: block;
-    margin: 0 auto;
+    margin: 0 0 0 auto;
     position: relative;
     border: 1px solid #F7FAFC;
+    max-width: 768px;
 }
 
 .total-cookie-consent-banner h2{
@@ -70,9 +73,5 @@
 @media (min-width: 768px){
     .total-cookie-consent-wrapper{
         padding: 32px;
-    }
-    .total-cookie-consent-banner{
-        max-width: calc(100vw - 64px);
-        bottom: 32px;
     }
 }

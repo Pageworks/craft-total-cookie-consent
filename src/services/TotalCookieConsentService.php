@@ -28,6 +28,46 @@ class TotalCookieConsentService extends Component
     public function getBannerType(string $defaultBanner, bool $gdpr, string $visitorsCountry, string $visitorsRegion, array $explicitCountries, array $impliedCountries) : string
     {
         $bannerType = $defaultBanner;
+
+        if ($gdpr)
+        {
+            $euCountries = [
+                'AT',
+                'BE',
+                'BG',
+                'HR',
+                'CY',
+                'CZ',
+                'DK',
+                'EE',
+                'FI',
+                'FR',
+                'DE',
+                'GR',
+                'HU',
+                'IE',
+                'IT',
+                'LV',
+                'LT',
+                'LU',
+                'MT',
+                'NL',
+                'PL',
+                'PT',
+                'RO',
+                'SK',
+                'SI',
+                'ES',
+                'SE',
+            ];
+            foreach ($euCountries as $country)
+            {
+                if ($country == $visitorsCountry)
+                {
+                    return 'explicit';
+                }
+            }
+        }
         
         foreach ($explicitCountries as $country)
         {
@@ -43,11 +83,6 @@ class TotalCookieConsentService extends Component
             {
                 return 'implied';
             }
-        }
-
-        if ($gdpr)
-        {
-            // TODO: check EU countries & return explicit if matched
         }
 
         return $defaultBanner;

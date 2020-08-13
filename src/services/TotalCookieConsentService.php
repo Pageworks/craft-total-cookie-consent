@@ -26,26 +26,42 @@ class TotalCookieConsentService extends Component
     // Public Methods
     // =========================================================================
 
+    public function lookupVisitorInfo()
+    {
+        $devMode = Craft::$app->getConfig()->general->devMode;
+        $localIps = ['127.0.0.1', '::1'];
+        $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
+        if (in_array($ip, $localIps) && $devMode)
+        {
+            return [];
+        }
+
+        $ret = [];
+        $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
+        if ($cachedData) {
+            $ret = json_decode($cachedData, true);
+        }
+        return $ret;
+    }
+
     public function acceptImpliedCookies()
     {
         $devMode = Craft::$app->getConfig()->general->devMode;
         $localIps = ['127.0.0.1', '::1'];
         $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        if (in_array($ip, $localIps) || $devMode)
+        if (in_array($ip, $localIps) && $devMode)
         {
             return;
         }
 
         $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
-        if ($cachedData) {
-            $settings = TotalCookieConsent::getInstance()->settings;
-            $visitorInfo = json_decode($cachedData);
-            foreach ($settings->consentTypes as $type)
-            {
-                $visitorInfo['consent'][$type['handle']] = true;
-            }
-            Craft::$app->getCache()->set('tcc.' . $ip, json_encode($visitorInfo), 86400);
+        $settings = TotalCookieConsent::getInstance()->settings;
+        $visitorInfo = $this->lookupVisitorInfo();
+        foreach ($settings->consentTypes as $type)
+        {
+            $visitorInfo['consent'][$type['handle']] = true;
         }
+        Craft::$app->getCache()->set('tcc.' . $ip, json_encode($visitorInfo), 86400);
         return;
     }
 
@@ -57,7 +73,7 @@ class TotalCookieConsentService extends Component
         $devMode = Craft::$app->getConfig()->general->devMode;
         $localIps = ['127.0.0.1', '::1'];
         $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        if (in_array($ip, $localIps) || $devMode)
+        if (in_array($ip, $localIps) && $devMode)
         {
             foreach ($settings->consentTypes as $type)
             {
@@ -66,10 +82,9 @@ class TotalCookieConsentService extends Component
             return $ret;
         }
 
-        $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
-        if ($cachedData) {
-            $visitorInfo = json_decode($cachedData);
-            foreach ($visitorInfo->consent as $key => $value)
+        $visitorInfo = $this->lookupVisitorInfo();
+        if (isset($visitorInfo['consent'])) {
+            foreach ($visitorInfo['consent'] as $key => $value)
             {
                 $ret[$key] = $value;
             }
@@ -80,7 +95,6 @@ class TotalCookieConsentService extends Component
             {
                 $ret[$type['handle']] = false;
             }
-            $this->renderBanner();
         }
 
         return $ret;
@@ -90,37 +104,34 @@ class TotalCookieConsentService extends Component
     {
         $devMode = Craft::$app->getConfig()->general->devMode;
         $localIps = ['127.0.0.1', '::1'];
-        if (in_array($ip, $localIps) || $devMode)
+        if (in_array($ip, $localIps) && $devMode)
         {
             return;
         }
 
-        $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
-        if ($cachedData) {
-            $visitorInfo = json_decode($cachedData);
-            $settings = TotalCookieConsent::getInstance()->settings;
-            $visitorInfo['consent'] = [];
+        $visitorInfo = $this->lookupVisitorInfo();
+        $settings = TotalCookieConsent::getInstance()->settings;
+        $visitorInfo['consent'] = [];
 
-            foreach ($settings->consentTypes as $type)
+        foreach ($settings->consentTypes as $type)
+        {
+            if (isset($params[$type['handle']]))
             {
-                if (isset($params[$type['handle']]))
-                {
-                    $visitorInfo['consent'][$type['handle']] = $params[$type['handle']];
-                }
-                else
-                {
-                    $value = 0;
-                    if ($type->required)
-                    {
-                        // The user must have unchecked the box using some HTML editing tomfoolery
-                        $value = 1;
-                    }
-                    $visitorInfo['consent'][$type['handle']] = $value;
-                }
+                $visitorInfo['consent'][$type['handle']] = $params[$type['handle']];
             }
-
-            Craft::$app->getCache()->set('tcc.' . $ip, json_encode($visitorInfo), 86400);
+            else
+            {
+                $value = 0;
+                if ($type['required'])
+                {
+                    // The user must have unchecked the box using some HTML editing tomfoolery
+                    $value = 1;
+                }
+                $visitorInfo['consent'][$type['handle']] = $value;
+            }
         }
+
+        Craft::$app->getCache()->set('tcc.' . $ip, json_encode($visitorInfo), 86400);
     }
 
     public function getBannerType(string $defaultBanner, bool $gdpr, string $visitorsCountry, string $visitorsRegion, array $explicitCountries, array $impliedCountries) : string
@@ -169,7 +180,7 @@ class TotalCookieConsentService extends Component
         
         foreach ($explicitCountries as $country)
         {
-            if ($country == $visitorsCountry)
+            if ($country['handle'] == $visitorsCountry)
             {
                 return 'explicit';
             }
@@ -177,7 +188,7 @@ class TotalCookieConsentService extends Component
 
         foreach ($impliedCountries as $country)
         {
-            if ($country == $visitorsCountry)
+            if ($country['handle'] == $visitorsCountry)
             {
                 return 'implied';
             }
@@ -191,18 +202,14 @@ class TotalCookieConsentService extends Component
         $devMode = Craft::$app->getConfig()->general->devMode;
         $localIps = ['127.0.0.1', '::1'];
         $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        if (in_array($ip, $localIps) || $devMode)
+        if (in_array($ip, $localIps) && $devMode)
         {
             return [];
         }
 
-        $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
-        if ($cachedData) {
-            $visitorInfo = json_decode($cachedData);
-            return [
-                'country' => $visitorInfo['country_code'],
-                'region' => $visitorInfo['region_code'],
-            ];
+        $visitorInfo = $this->lookupVisitorInfo();
+        if (!empty($visitorInfo) && isset($visitorInfo['country']) && isset($visitorInfo['region'])) {
+            return $visitorInfo;
         }
 
         $client = new \GuzzleHttp\Client();
@@ -226,40 +233,58 @@ class TotalCookieConsentService extends Component
 
         $bannerType = $settings->defaultConsentType;
 
+        $visitorInfo = null;
         if (!empty($settings->ipapiKey))
         {
             $visitorInfo = $this->locateVisitor($settings->ipapiKey);
             if (!empty($visitorInfo))
             {
-                $bannerType = $this->getBannerType($settings->defaultConsentType, $settings->gdprBanner, $visitorInfo['country'], $visitorInfo['region'], $settings->explicitConsentTable, $settings->impledConsentTable);
+                $explicit = [];
+                if (!empty($settings->explicitConsentTable))
+                {
+                    $explicit = $settings->explicitConsentTable;
+                }
+                $implied = [];
+                if (!empty($settings->impledConsentTable))
+                {
+                    $implied = $settings->impledConsentTable;
+                }
+                $bannerType = $this->getBannerType($settings->defaultConsentType, $settings->gdprBanner, $visitorInfo['country'], $visitorInfo['region'], $explicit, $implied);
             }
+        }
+        else
+        {
+            $visitorInfo = $this->lookupVisitorInfo();
         }
 
         $template = null;
         $view = Craft::$app->getView();
         $oldMode = $view->getTemplateMode();
         $view->setTemplateMode(View::TEMPLATE_MODE_CP);
-        switch ($bannerType)
+        if (!isset($visitorInfo['consent']))
         {
-            case 'implied':
-                $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\ImpliedConsentBannerAsset');
-                $template = $view->renderTemplate('total-cookie-consent/banners/implied', [
-                    'copy' => $settings->impliedCopy,
-                    'url' => $settings->cookiePolicyLink,
-                ]);
-                $this->acceptImpliedCookies();
-                break;
-            case 'explicit':
-                $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\ExplicitConsentBannerAsset');
-                $template = $view->renderTemplate('total-cookie-consent/banners/explicit', [
-                    'consentTypes' => $settings->consentTypes,
-                ]);
-                break;
-            default:
-                break;
+            switch ($bannerType)
+            {
+                case 'implied':
+                    $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\ImpliedConsentBannerAsset');
+                    $template = $view->renderTemplate('total-cookie-consent/banners/implied', [
+                        'copy' => $settings->impliedCopy,
+                        'url' => $settings->cookiePolicyLink,
+                    ]);
+                    $this->acceptImpliedCookies();
+                    break;
+                case 'explicit':
+                    $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\ExplicitConsentBannerAsset');
+                    $template = $view->renderTemplate('total-cookie-consent/banners/explicit', [
+                        'consentTypes' => $settings->consentTypes,
+                    ]);
+                    break;
+                default:
+                    $this->acceptImpliedCookies();
+                    break;
+            }
         }
         $view->setTemplateMode($oldMode);
-
         return $template;
     }
 }

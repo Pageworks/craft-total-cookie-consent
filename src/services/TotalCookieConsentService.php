@@ -134,7 +134,7 @@ class TotalCookieConsentService extends Component
         Craft::$app->getCache()->set('tcc.' . $ip, json_encode($visitorInfo), 86400);
     }
 
-    public function getBannerType(string $defaultBanner, bool $gdpr, string $visitorsCountry, string $visitorsRegion, array $explicitCountries, array $impliedCountries) : string
+    public function getBannerType(string $defaultBanner, bool $gdpr, string $visitorsCountry, string $visitorsRegion, array $countries, array $regions) : string
     {
         $bannerType = $defaultBanner;
 
@@ -178,19 +178,19 @@ class TotalCookieConsentService extends Component
             }
         }
         
-        foreach ($explicitCountries as $country)
+        foreach ($countries as $country)
         {
-            if ($country['handle'] == $visitorsCountry)
+            if ($country['countryCode'] == $visitorsCountry)
             {
-                return 'explicit';
+                return $country['bannerType'];
             }
         }
 
-        foreach ($impliedCountries as $country)
+        foreach ($regions as $region)
         {
-            if ($country['handle'] == $visitorsCountry)
+            if ($region['countryCode'] == $visitorsCountry && $region['regionCode'] == $visitorsRegion)
             {
-                return 'implied';
+                return $region['bannerType'];
             }
         }
 
@@ -239,17 +239,17 @@ class TotalCookieConsentService extends Component
             $visitorInfo = $this->locateVisitor($settings->ipapiKey);
             if (!empty($visitorInfo))
             {
-                $explicit = [];
-                if (!empty($settings->explicitConsentTable))
+                $countries = [];
+                if (!empty($settings->countriesTable))
                 {
-                    $explicit = $settings->explicitConsentTable;
+                    $countries = $settings->countriesTable;
                 }
-                $implied = [];
-                if (!empty($settings->impledConsentTable))
+                $regions = [];
+                if (!empty($settings->regionsTable))
                 {
-                    $implied = $settings->impledConsentTable;
+                    $regions = $settings->regionsTable;
                 }
-                $bannerType = $this->getBannerType($settings->defaultConsentType, $settings->gdprBanner, $visitorInfo['country'], $visitorInfo['region'], $explicit, $implied);
+                $bannerType = $this->getBannerType($settings->defaultConsentType, $settings->gdprBanner, $visitorInfo['country'], $visitorInfo['region'], $countries, $regions);
             }
         }
         else

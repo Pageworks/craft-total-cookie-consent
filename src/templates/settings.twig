@@ -95,30 +95,53 @@
 }}
 
 {{ forms.editableTableField({
-    label: 'Explicit Consent Locations',
-    instructions: 'Alpha-2 ISO codes of the countries that must recieve the explicit banner.',
-    id: 'explicitConsentTable',
-    name: 'explicitConsentTable',
-    rows: settings['explicitConsentTable'],
+    label: 'Countries',
+    instructions: 'Show a specific banner based on the visitors country.',
+    id: 'countriesTable',
+    name: 'countriesTable',
+    rows: settings['countriesTable'],
     cols: {
-        handle: {
+        countryCode: {
             heading: 'ISO Code',
             type: 'text',
+            info: 'Alpha-2 ISO codes'
+        },
+        bannerType: {
+            heading: 'Banner Type',
+            type: 'select',
+            options: {
+                implied: 'Implied'|t('total-cookie-consent'),
+                explicit: 'Explicit'|t('total-cookie-consent'),
+            }
         }
     }
 })
 }}
 
 {{ forms.editableTableField({
-    label: 'Implied Consent Locations',
-    instructions: 'Alpha-2 ISO codes of the countries that must recieve the implied banner.',
-    id: 'impledConsentTable',
-    name: 'impledConsentTable',
-    rows: settings['impledConsentTable'],
+    label: 'Regions',
+    instructions: 'Show a specific banner based on the visitors state or territory.',
+    id: 'regionsTable',
+    name: 'regionsTable',
+    rows: settings['regionsTable'],
     cols: {
-        handle: {
-            heading: 'ISO Code',
+        countryCode: {
+            heading: 'Country ISO Code',
             type: 'text',
+            info: 'Alpha-2 ISO codes'
+        },
+        regionCode: {
+            heading: 'Region ISO Code',
+            type: 'text',
+            info: 'Alpha-2 ISO codes'
+        },
+        bannerType: {
+            heading: 'Banner Type',
+            type: 'select',
+            options: {
+                implied: 'Implied'|t('total-cookie-consent'),
+                explicit: 'Explicit'|t('total-cookie-consent'),
+            }
         }
     }
 })

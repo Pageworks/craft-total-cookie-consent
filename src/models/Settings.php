@@ -44,10 +44,10 @@ class Settings extends Model
     public $consentTypes;
 
     /** @var array */
-    public $impledConsentTable = [];
+    public $countriesTable = [];
 
     /** @var array */
-    public $explicitConsentTable = [];
+    public $regionsTable;
 
     // Public Methods
     // =========================================================================
@@ -76,6 +76,14 @@ class Settings extends Model
                 'defaultOn' => true,
                 'required' => false,
             ],
+        ];
+
+        $this->regionsTable = [
+            [
+                'countryCode' => 'US',
+                'regionCode' => 'CA',
+                'bannerType' => 'implied',
+            ]
         ];
 
         $this->impliedCopy = Craft::t('total-cookie-consent', 'We use cookies to improve your experience and deliver prioritized content.');

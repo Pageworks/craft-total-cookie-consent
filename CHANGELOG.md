@@ -11,5 +11,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - plugin settings
 - banner template hook `{% hook 'total-cookie-consent' %}`
 - default implied banner functionality
-- geolocation lookup via ipapi
-- explicit & implied country code lookup functionality
+- default explicit banner functionality
+- geolocation lookup via [ipapi](https://ipapi.com/)
+- country based banners
+- country + region based banners
+- GDPR banners

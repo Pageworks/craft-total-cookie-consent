@@ -133,7 +133,7 @@ class TotalCookieConsentService extends Component
             $visitorInfo = $this->locateVisitor($settings->ipapiKey);
             if (!empty($visitorInfo))
             {
-                $bannerType = $this->getBannerType($settings->defaultConsentType, $visitorInfo['country'], $visitorInfo['region'], $settings->explicitConsentTable, $settings->impledConsentTable);
+                $bannerType = $this->getBannerType($settings->defaultConsentType, $settings->gdprBanner, $visitorInfo['country'], $visitorInfo['region'], $settings->explicitConsentTable, $settings->impledConsentTable);
             }
         }
 
@@ -144,17 +144,16 @@ class TotalCookieConsentService extends Component
         switch ($bannerType)
         {
             case 'implied':
-                $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\TotalCookieConsentAsset');
+                $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\ImpliedConsentBannerAsset');
                 $template = $view->renderTemplate('total-cookie-consent/banners/implied', [
-                    'heading' => $settings->impliedHeading,
                     'copy' => $settings->impliedCopy,
+                    'url' => $settings->cookiePolicyLink,
                 ]);
                 break;
             case 'explicit':
-                $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\TotalCookieConsentAsset');
+                $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\ExplicitConsentBannerAsset');
                 $template = $view->renderTemplate('total-cookie-consent/banners/explicit', [
-                    'heading' => $settings->explicitHeading,
-                    'copy' => $settings->explicitCopy,
+                    'consentTypes' => $settings->consentTypes,
                 ]);
                 break;
             default:

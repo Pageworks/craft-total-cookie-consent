@@ -1,0 +1,66 @@
+.total-cookie-consent-banner{
+    padding: 16px 16px 12px;
+    background-color: #1A202C;
+    color: #fff;
+    box-shadow: 0 20px -25px -5px rgba(0, 0, 0, 0.1), 0 10px -10px -5px rgba(0, 0, 0, 0.04);
+    max-height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-flow: row nowrap;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 999999;
+}
+
+.total-cookie-consent-banner p{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.618;
+    display: block;
+    flex: 1;
+    width: 100%;
+    margin: 0;
+}
+
+.total-cookie-consent-banner a{
+    cursor: pointer;
+    color: #fff;
+}
+.total-cookie-consent-banner a:hover,
+.total-cookie-consent-banner a:focus{
+    text-decoration: underline;
+}
+
+.total-cookie-consent-banner button{
+    height: 48px;
+    white-space: nowrap;
+    line-height: 48px;
+    background-color: #EDF2F7;
+    text-align: center;
+    color: #1A202C;
+    padding: 0 32px;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
+}
+.total-cookie-consent-banner button:hover,
+.total-cookie-consent-banner button:focus{
+    background-color: #fff;
+}
+.total-cookie-consent-banner button:active{
+    background-color: #EDF2F7;
+}
+
+@media (min-width: 768px){
+    .total-cookie-consent-banner{
+        padding: 32px 64px 24px;
+    }
+}

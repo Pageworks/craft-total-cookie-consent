@@ -19,7 +19,7 @@ use craft\web\assets\cp\CpAsset;
  * @package   TotalCookieConsent
  * @since     1.0.0
  */
-class TotalCookieConsentAsset extends AssetBundle
+class ExplicitConsentBannerAsset extends AssetBundle
 {
     // Public Methods
     // =========================================================================
@@ -29,14 +29,14 @@ class TotalCookieConsentAsset extends AssetBundle
      */
     public function init()
     {
-        $this->sourcePath = "@page8/totalcookieconsent/assetbundles/totalcookieconsent/dist";
+        $this->sourcePath = "@page8/totalcookieconsent/assetbundles/totalcookieconsent/dist/explicit";
 
         $this->js = [
-            'js/TotalCookieConsent.js',
+            'total-cookie-consent-explicit.js',
         ];
 
         $this->css = [
-            'css/TotalCookieConsent.css',
+            'total-cookie-consent-explicit.css',
         ];
 
         parent::init();

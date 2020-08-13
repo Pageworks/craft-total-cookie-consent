@@ -29,33 +29,8 @@
 })
 }}
 
-{{ forms.textField({
-        label: 'API Key',
-        instructions: 'To enable geolocation based banners get an API key from https://ipapi.com/',
-        id: 'ipapiKey',
-        name: 'ipapiKey',
-        value: settings['ipapiKey']
-    })
-}}
-
-{{ forms.lightswitchField({
-        label: 'GDPR',
-        instructions: 'All EU visitors will recieve the explicit banner.',
-        id: 'gdprBanner',
-        name: 'gdprBanner',
-        on: settings['gdprBanner']
-    })
-}}
-
-{{ forms.textField({
-    label: 'Implied Consent Heading',
-    id: 'impliedHeading',
-    name: 'impliedHeading',
-    value: settings['impliedHeading']
-})
-}}
 {{ forms.textareaField({
-    label: 'Implied Consent Copy',
+    label: 'Implied Consent Banner',
     id: 'impliedCopy',
     name: 'impliedCopy',
     value: settings['impliedCopy']
@@ -63,17 +38,10 @@
 }}
 
 {{ forms.textField({
-    label: 'Explicit Consent Heading',
-    id: 'explicitHeading',
-    name: 'explicitHeading',
-    value: settings['explicitHeading']
-})
-}}
-{{ forms.textareaField({
-    label: 'Explicit Consent Copy',
-    id: 'explicitCopy',
-    name: 'explicitCopy',
-    value: settings['explicitCopy']
+    label: 'Cookie Policy URL',
+    id: 'cookiePolicyLink',
+    name: 'cookiePolicyLink',
+    value: settings['cookiePolicyLink']
 })
 }}
 
@@ -92,6 +60,10 @@
             heading: 'Name',
             type: 'text',
         },
+        description: {
+            heading: 'Description',
+            type: 'text',
+        },
         defaultOn: {
             heading: 'Default On',
             type: 'lightswitch',
@@ -101,6 +73,24 @@
             type: 'lightswitch',
         }
     }
+})
+}}
+
+{{ forms.textField({
+    label: 'API Key',
+    instructions: 'To enable geolocation based banners get an API key from https://ipapi.com/',
+    id: 'ipapiKey',
+    name: 'ipapiKey',
+    value: settings['ipapiKey']
+})
+}}
+
+{{ forms.lightswitchField({
+    label: 'GDPR',
+    instructions: 'All EU visitors will recieve the explicit banner.',
+    id: 'gdprBanner',
+    name: 'gdprBanner',
+    on: settings['gdprBanner']
 })
 }}
 

@@ -32,16 +32,10 @@ class Settings extends Model
     public $gdprBanner = true;
 
     /** @var string */
-    public $impliedHeading;
-
-    /** @var string */
     public $impliedCopy;
 
     /** @var string */
-    public $explicitHeading;
-
-    /** @var string */
-    public $explicitCopy;
+    public $cookiePolicyLink;
 
     /** @var string */
     public $defaultConsentType = 'none';
@@ -64,28 +58,27 @@ class Settings extends Model
             [
                 'handle' => 'necessary',
                 'name' => Craft::t('total-cookie-consent', 'Necessary'),
+                'description' => Craft::t('total-cookie-consent', 'These cokies are essential so that you can move around the website and use its features. Without these cookies, some services will not be available.'),
                 'defaultOn' => true,
                 'required' => true,
             ],
             [
                 'handle' => 'statistics',
                 'name' => Craft::t('total-cookie-consent', 'Statistics'),
+                'description' => Craft::t('total-cookie-consent', "These cookies are used to analyze our traffic. We share this information about your use of our site with our analytics partners who may combine it with other information that you've provided to them or that they've collected from your use of their services."),
                 'defaultOn' => true,
                 'required' => false,
             ],
             [
                 'handle' => 'marketing',
                 'name' => Craft::t('total-cookie-consent', 'Marketing'),
+                'description' => Craft::t('total-cookie-consent', "These cookies are used to personalize content, ads, and to provide social media features. We share this information about your use of our site with our social media and advertising partners."),
                 'defaultOn' => true,
                 'required' => false,
             ],
         ];
 
-        $this->explicitHeading = Craft::t('total-cookie-consent', 'This website uses cookies');
-        $this->explicitCopy = Craft::t('total-cookie-consent', "We use cookies to personalize content and ads, to provide social media features, and to analyze our traffic. We also share information about your use of our site with our social media, advertising and analytics partners who may combine it with other information that you've provided to them or that they've collected from your use of their services.");
-
-        $this->impliedHeading = Craft::t('total-cookie-consent', 'This website uses cookies');
-        $this->impliedCopy = Craft::t('total-cookie-consent', "We use cookies to personalize content and ads, to provide social media features, and to analyze our traffic. We also share information about your use of our site with our social media, advertising and analytics partners who may combine it with other information that you've provided to them or that they've collected from your use of their services.");
+        $this->impliedCopy = Craft::t('total-cookie-consent', 'We use cookies to improve your experience and deliver prioritized content.');
     }
 
     /**
@@ -94,9 +87,9 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['impliedHeading', 'impliedCopy', 'explicitHeading', 'explicitCopy', 'consentTypes'], 'required'],
-            [['ipapiKey', 'impliedHeading', 'impliedCopy', 'explicitHeading', 'explicitCopy'], 'string'],
-            [['ipapiKey'], 'boolean'],
+            [['impliedCopy'], 'required'],
+            [['ipapiKey', 'impliedCopy', 'cookiePolicyLink'], 'string'],
+            [['gdprBanner'], 'boolean'],
             [['defaultConsentType'], 'in', 'range' => ['none', 'implied', 'explicit']],
         ];
     }

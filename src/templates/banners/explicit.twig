@@ -28,7 +28,12 @@
                                 <span>({{ "required"|t('total-cookie-consent') }})</span>
                             {% endif %}
                         </h3>
-                        <p>{{ type.description }}</p>
+                        <p>
+                            {{ type.description }}
+                            {% if type.url|length %}
+                                <a href="{{ type.url }}">{{ "Read policy"|t('total-cookie-consent') }}.</a>
+                            {% endif %}
+                        </p>
                     </div>
                 </label>
             </lightswitch-component>

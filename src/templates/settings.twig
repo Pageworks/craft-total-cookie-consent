@@ -52,17 +52,22 @@
     name: 'consentTypes',
     rows: settings['consentTypes'],
     cols: {
-        handle: {
-            heading: 'Handle',
-            type: 'text',
-        },
         name: {
             heading: 'Name',
+            type: 'text',
+        },
+        handle: {
+            heading: 'Handle',
             type: 'text',
         },
         description: {
             heading: 'Description',
             type: 'text',
+        },
+        url: {
+            heading: 'URL',
+            type: 'text',
+            info: 'Link to your privacy policy'
         },
         defaultOn: {
             heading: 'Default On',
@@ -82,15 +87,6 @@
     id: 'ipapiKey',
     name: 'ipapiKey',
     value: settings['ipapiKey']
-})
-}}
-
-{{ forms.lightswitchField({
-    label: 'GDPR',
-    instructions: 'All EU visitors will recieve the explicit banner.',
-    id: 'gdprBanner',
-    name: 'gdprBanner',
-    on: settings['gdprBanner']
 })
 }}
 

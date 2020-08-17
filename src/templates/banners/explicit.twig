@@ -3,7 +3,7 @@
     {{ csrfInput() }}
     {{ actionInput('total-cookie-consent/default/save') }}
 
-    <h2>{{ "cookie settings"|t('total-cookie-consent') }}</h2>
+    <h2>{{ "cookie settings"|t }}</h2>
     <div style="padding:32px;">
         {% for type in consentTypes %}
             <lightswitch-component eager-load-css="lightswitch-component">
@@ -23,15 +23,15 @@
                     <i></i>
                     <div>
                         <h3>
-                            {{ type.name }}
+                            {{ type.name|t }}
                             {% if type.required %}
-                                <span>({{ "required"|t('total-cookie-consent') }})</span>
+                                <span>({{ "required"|t }})</span>
                             {% endif %}
                         </h3>
                         <p>
-                            {{ type.description }}
+                            {{ type.description|t }}
                             {% if type.url|length %}
-                                <a href="{{ type.url }}">{{ "Read policy"|t('total-cookie-consent') }}.</a>
+                                <a href="{{ type.url }}">{{ "Read policy"|t }}.</a>
                             {% endif %}
                         </p>
                     </div>
@@ -39,7 +39,7 @@
             </lightswitch-component>
         {% endfor %}
     </div>
-    <button aria-label="{{ 'close cookie consent modal'|t('total-cookie-consent') }}" type="submit">
+    <button aria-label="{{ 'close cookie consent modal'|t }}" type="submit">
         <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg>
     </button>
 </form>

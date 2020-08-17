@@ -1,13 +1,13 @@
 <div class="total-cookie-consent-banner js-total-cookie-consent-banner" role="alert">
     {% if copy|length %}
         <p>
-            {{ copy }}
+            {{ copy|t }}
             {% if url|length %}
-                <a href="{{ url }}">{{ "Read our cookie policy"|t('total-cookie-consent') }}.</a>
+                <a href="{{ url }}">{{ "Read our cookie policy"|t }}.</a>
             {% endif %}
         </p>
     {% endif %}
     <button class="js-total-cookie-consent-close-button">
-        {{ "okay"|t('total-cookie-consent') }}
+        {{ "okay"|t }}
     </button>
 </div>

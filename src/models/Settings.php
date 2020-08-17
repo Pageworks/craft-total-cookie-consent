@@ -80,7 +80,7 @@ class Settings extends Model
 
         $this->impliedCopy = Craft::t('total-cookie-consent', 'We use cookies to improve your experience and deliver prioritized content.');
 
-        $countriesTable = [
+        $this->countriesTable = [
             [
                 'countryCode' => 'AT',
                 'bannerType' => 'explicit',

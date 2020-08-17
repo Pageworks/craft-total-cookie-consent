@@ -80,6 +80,60 @@
     }
 })
 }}
+<script>
+    var inputs = [];
+
+    function camelize(str) {
+        return str.toLowerCase().replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+            return index === 0 ? word.toLowerCase() : word.toUpperCase();
+        }).replace(/\s+/g, '');
+    }
+
+    function handleKey(e){
+        var hanldeInput = null;
+        for (var k = 0; k < inputs.length; k++){
+            if (inputs[k].id === parseInt(e.currentTarget.dataset.id)){
+                handleInput = inputs[k].handle;
+                break;
+            }
+        }
+        handleInput.value = camelize(e.currentTarget.value);
+    }
+
+    function hijackInputs(){
+        var table = document.body.querySelector('#settings-consentTypes');
+        var rows = Array.from(table.querySelectorAll('tbody tr'));
+
+        if (inputs.length){
+            for (var i = 0; i < inputs.length; i++){
+                inputs[i].name.removeEventListener('keyup', handleKey);
+            }
+        }
+        inputs = [];
+        for (var i = 0; i < rows.length; i++){
+            var nameInput = rows[i].querySelector('[name="settings[consentTypes][' + i + '][name]"]');
+            var handleInput = rows[i].querySelector('[name="settings[consentTypes][' + i + '][handle]"]');
+            inputs.push({
+                id: i,
+                name: nameInput,
+                handle: handleInput
+            });
+            nameInput.dataset.id = i;
+            nameInput.addEventListener('keyup', handleKey);
+            handleInput.value = camelize(nameInput.value);
+        }
+    }
+    hijackInputs();
+
+    function addRow(){
+        setTimeout(function(){
+            hijackInputs();
+        }, 150)
+    }
+
+    var addRowButton = document.body.querySelector('#settings-consentTypes-field .btn.add');
+    addRowButton.addEventListener('click', addRow);
+</script>
 
 {{ forms.textField({
     label: 'API Key',

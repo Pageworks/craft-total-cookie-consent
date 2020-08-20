@@ -32,11 +32,10 @@ class TotalCookieConsentService extends Component
     {
         $devMode = Craft::$app->getConfig()->general->devMode;
         $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        // if (in_array($ip, $this->localIps) || $devMode)
-        // {
-        //     return [];
-        // }
-        $ip = '2.16.7.255';
+        if (in_array($ip, $this->localIps) || $devMode)
+        {
+            return [];
+        }
 
         $ret = [];
         $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
@@ -51,11 +50,10 @@ class TotalCookieConsentService extends Component
         $devMode = Craft::$app->getConfig()->general->devMode;
         $this->localIps = ['127.0.0.1', '::1'];
         $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        // if (in_array($ip, $this->localIps) || $devMode)
-        // {
-        //     return;
-        // }
-        $ip = '2.16.7.255';
+        if (in_array($ip, $this->localIps) || $devMode)
+        {
+            return;
+        }
 
         $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
         $settings = TotalCookieConsent::getInstance()->settings;
@@ -75,15 +73,14 @@ class TotalCookieConsentService extends Component
 
         $devMode = Craft::$app->getConfig()->general->devMode;
         $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        // if (in_array($ip, $this->localIps) || $devMode)
-        // {
-        //     foreach ($settings->consentTypes as $type)
-        //     {
-        //         $ret[$type['handle']] = true;
-        //     }
-        //     return $ret;
-        // }
-        $ip = '2.16.7.255';
+        if (in_array($ip, $this->localIps) || $devMode)
+        {
+            foreach ($settings->consentTypes as $type)
+            {
+                $ret[$type['handle']] = true;
+            }
+            return $ret;
+        }
 
         $visitorInfo = $this->lookupVisitorInfo();
         if (isset($visitorInfo['consent'])) {
@@ -106,11 +103,10 @@ class TotalCookieConsentService extends Component
     public function save(string $ip, array $params)
     {
         $devMode = Craft::$app->getConfig()->general->devMode;
-        // if (in_array($ip, $this->localIps) || $devMode)
-        // {
-        //     return;
-        // }
-        $ip = '2.16.7.255';
+        if (in_array($ip, $this->localIps) || $devMode)
+        {
+            return;
+        }
 
         $visitorInfo = $this->lookupVisitorInfo();
         $settings = TotalCookieConsent::getInstance()->settings;
@@ -164,11 +160,10 @@ class TotalCookieConsentService extends Component
     {
         $devMode = Craft::$app->getConfig()->general->devMode;
         $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        // if (in_array($ip, $this->localIps) || $devMode)
-        // {
-        //     return [];
-        // }
-        $ip = '2.16.7.255';
+        if (in_array($ip, $this->localIps) || $devMode)
+        {
+            return [];
+        }
 
         $visitorInfo = $this->lookupVisitorInfo();
         if (!empty($visitorInfo) && isset($visitorInfo['country']) && isset($visitorInfo['region'])) {
@@ -194,11 +189,10 @@ class TotalCookieConsentService extends Component
     {
         $devMode = Craft::$app->getConfig()->general->devMode;
         $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        // if (in_array($ip, $this->localIps) || $devMode)
-        // {
-        //     return;
-        // }
-        $ip = '2.16.7.255';
+        if (in_array($ip, $this->localIps) || $devMode)
+        {
+            return;
+        }
 
         $settings = TotalCookieConsent::getInstance()->settings;
         $bannerType = $settings->defaultConsentType;

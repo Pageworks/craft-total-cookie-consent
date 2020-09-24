@@ -23,6 +23,7 @@ use craft\web\twig\variables\CraftVariable;
 use craft\events\RegisterUrlRulesEvent;
 
 use yii\base\Event;
+use page8\totalcookieconsent\services\TotalCookieConsentService;
 
 /**
  * Class TotalCookieConsent
@@ -71,7 +72,9 @@ class TotalCookieConsent extends Plugin
     {
         parent::init();
         self::$plugin = $this;
-
+        $this->setComponents([
+            'totalCookieConsentService' => TotalCookieConsentService::class
+        ]);
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,

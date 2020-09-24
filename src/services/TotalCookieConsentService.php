@@ -15,6 +15,7 @@ use page8\totalcookieconsent\TotalCookieConsent;
 use Craft;
 use craft\base\Component;
 use craft\web\View;
+use page8\totalcookieconsent\records\UserConsent;
 
 /**
  * @author    Pageworks
@@ -24,45 +25,61 @@ use craft\web\View;
 class TotalCookieConsentService extends Component
 {
     public $localIps = ['127.0.0.1', '::1'];
-
+    public $testMode = false;
+    public $testIp = null;
     // Public Methods
     // =========================================================================
 
     public function lookupVisitorInfo()
     {
-        $devMode = Craft::$app->getConfig()->general->devMode;
-        $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        if (in_array($ip, $this->localIps) || $devMode)
-        {
-            return [];
+        if($this->testMode == false){
+            $devMode = Craft::$app->getConfig()->general->devMode;
+            $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
+            if (in_array($ip, $this->localIps) || $devMode)
+            {
+                return [];
+            }
+        }else{
+            $ip = $this->testIp;
         }
-
+        
         $ret = [];
-        $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
-        if ($cachedData) {
-            $ret = json_decode($cachedData, true);
+//         $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
+//         if ($cachedData) {
+//             $ret = json_decode($cachedData, true);
+//         }
+        $visitor = UserConsent::find()->where(['ip'=> $ip])->one();
+        if($visitor){
+            $ret = $visitor;
         }
         return $ret;
     }
 
     public function acceptImpliedCookies()
     {
-        $devMode = Craft::$app->getConfig()->general->devMode;
-        $this->localIps = ['127.0.0.1', '::1'];
-        $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        if (in_array($ip, $this->localIps) || $devMode)
-        {
-            return;
+        if($this->testMode == false){
+            $devMode = Craft::$app->getConfig()->general->devMode;
+            $this->localIps = ['127.0.0.1', '::1'];
+            $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
+            if (in_array($ip, $this->localIps) || $devMode)
+            {
+                return;
+            }
+        }else{
+            $ip = $this->testIp;
         }
-
-        $cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
+        //$cachedData = Craft::$app->getCache()->get('tcc.' . $ip);
         $settings = TotalCookieConsent::getInstance()->settings;
-        $visitorInfo = $this->lookupVisitorInfo();
+        $visitor = $this->lookupVisitorInfo();
+        $consent = [];
         foreach ($settings->consentTypes as $type)
         {
-            $visitorInfo['consent'][$type['handle']] = true;
+            $consent[$type['handle']] = true;
         }
-        Craft::$app->getCache()->set('tcc.' . $ip, json_encode($visitorInfo), 86400);
+        $visitor->setAttributes([
+            'visitor_consent'=>json_encode($consent),
+        ], false);
+        $visitor->save();
         return;
     }
 
@@ -70,18 +87,19 @@ class TotalCookieConsentService extends Component
     {
         $ret = [];
         $settings = TotalCookieConsent::getInstance()->settings;
-
-        $devMode = Craft::$app->getConfig()->general->devMode;
-        $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        if (in_array($ip, $this->localIps) || $devMode)
-        {
-            foreach ($settings->consentTypes as $type)
+        if($this->testMode == false){
+            $devMode = Craft::$app->getConfig()->general->devMode;
+            $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
+            if (in_array($ip, $this->localIps) || $devMode)
             {
-                $ret[$type['handle']] = true;
+                foreach ($settings->consentTypes as $type)
+                {
+                    $ret[$type['handle']] = true;
+                }
+                return $ret;
             }
-            return $ret;
         }
-
+        
         $visitorInfo = $this->lookupVisitorInfo();
         if (isset($visitorInfo['consent'])) {
             foreach ($visitorInfo['consent'] as $key => $value)
@@ -102,21 +120,27 @@ class TotalCookieConsentService extends Component
 
     public function save(string $ip, array $params)
     {
-        $devMode = Craft::$app->getConfig()->general->devMode;
-        if (in_array($ip, $this->localIps) || $devMode)
-        {
-            return;
-        }
-
-        $visitorInfo = $this->lookupVisitorInfo();
         $settings = TotalCookieConsent::getInstance()->settings;
-        $visitorInfo['consent'] = [];
+        $this->testMode = $settings->testMode;
+        $this->testIp = $settings->testIp;
+
+        if($this->testMode == false){
+            $devMode = Craft::$app->getConfig()->general->devMode;
+            if (in_array($ip, $this->localIps) || $devMode)
+            {
+                return;
+            }
+        }else{
+            $ip = $this->testIp;
+        }
+        $visitorInfo = $this->lookupVisitorInfo();
+        $consent = [];
 
         foreach ($settings->consentTypes as $type)
         {
             if (isset($params[$type['handle']]))
             {
-                $visitorInfo['consent'][$type['handle']] = $params[$type['handle']];
+                $consent[$type['handle']] = $params[$type['handle']];
             }
             else
             {
@@ -126,11 +150,21 @@ class TotalCookieConsentService extends Component
                     // The user must have unchecked the box using some HTML editing tomfoolery
                     $value = 1;
                 }
-                $visitorInfo['consent'][$type['handle']] = $value;
+                $consent[$type['handle']] = $value;
             }
         }
 
-        Craft::$app->getCache()->set('tcc.' . $ip, json_encode($visitorInfo), 86400);
+        //Craft::$app->getCache()->set('tcc.' . $ip, json_encode($visitorInfo), 86400);
+        $site = Craft::$app->sites->getCurrentSite();
+        $siteId = $site->id;
+        $userConsent = UserConsent::find()->where(['ip'=> $ip])->one();
+        if (!empty($userConsent))
+        {
+            $userConsent->setAttributes([
+                'visitor_consent'=>json_encode($consent),
+            ], false);
+            $userConsent->save();   
+        }
     }
 
     public function getBannerType(string $defaultBanner, string $visitorsCountry, string $visitorsRegion, array $countries, array $regions) : string
@@ -156,17 +190,20 @@ class TotalCookieConsentService extends Component
         return $defaultBanner;
     }
 
-    public function locateVisitor(string $apiKey) : array
+    public function locateVisitor(string $apiKey)
     {
-        $devMode = Craft::$app->getConfig()->general->devMode;
-        $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        if (in_array($ip, $this->localIps) || $devMode)
-        {
-            return [];
+        if($this->testMode == false){
+            $devMode = Craft::$app->getConfig()->general->devMode;
+            $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
+            if (in_array($ip, $this->localIps) || $devMode)
+            {
+                return [];
+            }
+        }else{
+            $ip = $this->testIp;
         }
-
         $visitorInfo = $this->lookupVisitorInfo();
-        if (!empty($visitorInfo) && isset($visitorInfo['country']) && isset($visitorInfo['region'])) {
+        if (!empty($visitorInfo)) {
             return $visitorInfo;
         }
 
@@ -178,29 +215,43 @@ class TotalCookieConsentService extends Component
                 'country' => $data['country_code'],
                 'region' => $data['region_code'],
             ]; 
-            Craft::$app->getCache()->add('tcc.' . $ip, json_encode($visitorInfo), 86400);
-            return $visitorInfo;
+            //Craft::$app->getCache()->add('tcc.' . $ip, json_encode($visitorInfo), 86400);
+            $site = Craft::$app->sites->getCurrentSite();
+            $siteId = $site->id;
+            $visitor = new UserConsent();
+            $visitor->setAttributes([
+                'siteId'=> Craft::$app->sites->getCurrentSite()->id,
+                'visitor_info'=>json_encode($visitorInfo),
+                'ip'=>$ip,
+            ], false);
+            $visitor->save();
+            return $visitor;
         } catch (\Exception $e) {
+            Craft::warning("Error with API Fetch: ".$e->getMessage() );
             return [];
         }
     }
 
     public function renderBanner()
     {
-        $devMode = Craft::$app->getConfig()->general->devMode;
-        $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
-        if (in_array($ip, $this->localIps) || $devMode)
-        {
-            return;
-        }
-
         $settings = TotalCookieConsent::getInstance()->settings;
+        $this->testMode = $settings->testMode;
+        $this->testIp = $settings->testIp;
+
+        if($this->testMode == false){
+            $devMode = Craft::$app->getConfig()->general->devMode;
+            $ip = Craft::$app->getRequest()->userIP ?? Craft::$app->getRequest()->remoteIP;
+            if (in_array($ip, $this->localIps) || $devMode)
+            {
+                return;
+            }
+        }
         $bannerType = $settings->defaultConsentType;
-        $visitorInfo = null;
+        $visitor = null;
         if (!empty($settings->ipapiKey))
         {
-            $visitorInfo = $this->locateVisitor($settings->ipapiKey);
-            if (!empty($visitorInfo))
+            $visitor = $this->locateVisitor($settings->ipapiKey);
+            if (!empty($visitor))
             {
                 $countries = [];
                 if (!empty($settings->countriesTable))
@@ -212,19 +263,20 @@ class TotalCookieConsentService extends Component
                 {
                     $regions = $settings->regionsTable;
                 }
-                $bannerType = $this->getBannerType($settings->defaultConsentType, $visitorInfo['country'], $visitorInfo['region'], $countries, $regions);
+                $bannerType = $this->getBannerType($settings->defaultConsentType, $visitor->visitor_info['country'], $visitor->visitor_info['region'], $countries, $regions);
             }
         }
         else
         {
-            $visitorInfo = $this->lookupVisitorInfo();
+            Craft::warning("TCC: No API Key Set");
+            $visitor = $this->lookupVisitorInfo();
         }
 
         $template = null;
         $view = Craft::$app->getView();
         $oldMode = $view->getTemplateMode();
         $view->setTemplateMode(View::TEMPLATE_MODE_CP);
-        if (!isset($visitorInfo['consent']))
+        if (is_null($visitor->visitor_consent))
         {
             switch ($bannerType)
             {

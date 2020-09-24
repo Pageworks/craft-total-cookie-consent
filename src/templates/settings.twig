@@ -196,3 +196,19 @@
     }
 })
 }}
+
+{{ forms.lightswitchField({
+    label: 'Test Mode',
+    id: 'testMode',
+    name: 'testMode',
+    on: settings['testMode']
+})
+}}
+
+{{ forms.textField({
+    label: 'Test IP Address',
+    id: 'testIp',
+    name: 'testIp',
+    value: settings['testIp']
+})
+}}

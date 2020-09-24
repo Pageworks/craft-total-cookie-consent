@@ -6,7 +6,11 @@
     <h2>{{ "cookie settings"|t }}</h2>
     <div style="padding:32px;">
         {% for type in consentTypes %}
-            <lightswitch-component eager-load-css="lightswitch-component">
+            <lightswitch-component
+                {% if type.required %}
+                    style="pointer-events: none;"
+                {% endif %} 
+            >
                 <input 
                     type="checkbox" 
                     name="{{ type.handle }}" 
@@ -14,9 +18,6 @@
                     {% if type.defaultOn or type.required %}
                         checked
                     {% endif %}
-                    {% if type.required %}
-                        disabled
-                    {% endif %} 
                     value="1"
                 />
                 <label for="{{ type.handle }}-input">

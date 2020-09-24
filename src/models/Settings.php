@@ -46,6 +46,12 @@ class Settings extends Model
     /** @var array */
     public $regionsTable;
 
+    /** @var bool */
+    public $testMode = false;
+
+    /** @var string */
+    public $testIp;
+
     // Public Methods
     // =========================================================================
 
@@ -209,6 +215,7 @@ class Settings extends Model
             [['impliedCopy'], 'required'],
             [['ipapiKey', 'impliedCopy', 'cookiePolicyLink'], 'string'],
             [['defaultConsentType'], 'in', 'range' => ['none', 'implied', 'explicit']],
+            [['testMode'], 'boolean']
         ];
     }
 }

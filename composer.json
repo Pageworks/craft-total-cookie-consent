@@ -2,7 +2,7 @@
     "name": "page-8/total-cookie-consent",
     "description": "The plugin provides total control over the cookie consent collection process and includes three consent collection options: No Consent, Implied Consent, and Explicit Consent. Collection methods can be tailored per country or state to provide an optimal non-intrusive user experience.",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "0.1.1",
     "keywords": [
         "craft",
         "cms",

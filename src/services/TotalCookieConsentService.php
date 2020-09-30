@@ -292,6 +292,7 @@ class TotalCookieConsentService extends Component
                     $view->registerAssetBundle('page8\\totalcookieconsent\\assetbundles\\totalcookieconsent\\ExplicitConsentBannerAsset');
                     $template = $view->renderTemplate('total-cookie-consent/banners/explicit', [
                         'consentTypes' => $settings->consentTypes,
+                        'url' => $settings->cookiePolicyLink,
                     ]);
                     break;
                 default:

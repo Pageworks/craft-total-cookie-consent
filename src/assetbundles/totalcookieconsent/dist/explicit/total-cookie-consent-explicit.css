@@ -27,30 +27,51 @@
     background-color: #1A202C;
 }
 
-.total-cookie-consent-banner button{
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 36px;
+.total-cookie-consent-banner .button{
     height: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    flex-flow: column wrap;
-    border-radius: 50%;
+    padding: 0 16px;
+    flex-flow: row nowrap;
+    border-radius: 4px;
     transition: all 150ms ease-in-out;
-    color: #EDF2F7;
-}
-.total-cookie-consent-banner button:hover,
-.total-cookie-consent-banner button:focus{
-    background-color: rgba(255,255,255,0.05);
     color: #fff;
+    background-color: #1A202C;
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
 }
-.total-cookie-consent-banner button:active{
-    background-color: rgba(255,255,255,0.1);
+.total-cookie-consent-banner .button:hover,
+.total-cookie-consent-banner .button:focus{
+    background-color: #2D3748;
+}
+.total-cookie-consent-banner .button:active{
+    background-color: #1A202C;
 }
 
-.total-cookie-consent-banner button svg{
+.total-cookie-consent-banner .button.accept{
+    background-color: #2F855A;
+}
+.total-cookie-consent-banner .button.accept:hover,
+.total-cookie-consent-banner .button.accept:focus{
+    background-color: #38A169;
+}
+.total-cookie-consent-banner .button.accept:active{
+    background-color: #276749;
+}
+
+.total-cookie-consent-banner .button i{
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.total-cookie-consent-banner .button i svg{
     width: 16px;
     height: 16px;
 }

@@ -29,11 +29,16 @@
 
 .total-cookie-consent-banner a{
     cursor: pointer;
-    color: #fff;
+    color: #68D391;
+    border: none;
 }
 .total-cookie-consent-banner a:hover,
 .total-cookie-consent-banner a:focus{
     text-decoration: underline;
+}
+.total-cookie-consent-banner a::before,
+.total-cookie-consent-banner a::after{
+    display: none;
 }
 
 .total-cookie-consent-banner button{

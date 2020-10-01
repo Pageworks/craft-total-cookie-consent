@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.2.0] - 2020-10-01
+
+### Added
+
+- privacy policy button to the explicit consent form
+- accept button to the explicit consent form
+
+### Changed
+
+- explicit consent descriptions hidden within an accordion (closed by default)
+
+### Removed
+
+- explicit consent URL field
+- close button from explicit consent form
+
+## [0.1.1] - 2020-08-13
+
 ### Added
 
 - plugin settings

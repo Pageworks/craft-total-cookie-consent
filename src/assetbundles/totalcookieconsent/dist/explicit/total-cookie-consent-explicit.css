@@ -153,7 +153,7 @@ lightswitch-component label i {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    margin-right: 32px;
+    margin-right: 16px;
 }
 lightswitch-component label i::before {
     content: "";
@@ -192,6 +192,7 @@ lightswitch-component label span {
     justify-content: center;
     align-items: center;
     vertical-align: top;
+    flex-flow: column wrap;
 }
 .consent-button svg{
     color: #4A5568;
@@ -207,5 +208,35 @@ lightswitch-component label span {
     .total-cookie-consent-banner{
         bottom: 32px;
         right: 32px;
+    }
+}
+
+@media screen and (min-width:0\0) {
+    lightswitch-component label div{
+        flex: none;
+        display: inline-block;
+    }
+    lightswitch-component label i::after{
+        display: none;
+    }
+    lightswitch-component label i::before{
+        display: none;
+    }
+    lightswitch-component label i{
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        padding-left: 24px;
+        background-color: #F7FAFC;
+        border: 1px solid #CBD5E0;
+        display: inline-block;
+    }
+    lightswitch-component input:checked + label i{
+        border-color: #2C5282;
+        background-color: #2B6CB0;
+    }
+    .consent-button{
+        width: 36px;
+        height: 36px;
     }
 }

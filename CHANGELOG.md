@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.2.1] - 2020-10-01
+
+### Fixed
+
+- IE 11 styles
+
 ## [0.2.0] - 2020-10-01
 
 ### Added

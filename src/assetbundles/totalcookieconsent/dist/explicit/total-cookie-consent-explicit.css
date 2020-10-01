@@ -2,7 +2,7 @@
     position: fixed;
     bottom: 16px;
     right: 16px;
-    width: 768px;
+    width: 500px;
     max-width: calc(100vw - 32px);
     z-index: 999999;
     background-color: #fff;
@@ -27,7 +27,7 @@
     background-color: #1A202C;
 }
 
-.total-cookie-consent-banner .button{
+.total-cookie-consent-banner .consent-action-button{
     height: 36px;
     display: inline-flex;
     justify-content: center;
@@ -42,27 +42,28 @@
     text-transform: uppercase;
     font-size: 14px;
     font-weight: 600;
+    width: calc(50% - 8px);
 }
-.total-cookie-consent-banner .button:hover,
-.total-cookie-consent-banner .button:focus{
+.total-cookie-consent-banner .consent-action-button:hover,
+.total-cookie-consent-banner .consent-action-button:focus{
     background-color: #2D3748;
 }
-.total-cookie-consent-banner .button:active{
+.total-cookie-consent-banner .consent-action-button:active{
     background-color: #1A202C;
 }
 
-.total-cookie-consent-banner .button.accept{
+.total-cookie-consent-banner .consent-action-button.accept{
     background-color: #2F855A;
 }
-.total-cookie-consent-banner .button.accept:hover,
-.total-cookie-consent-banner .button.accept:focus{
+.total-cookie-consent-banner .consent-action-button.accept:hover,
+.total-cookie-consent-banner .consent-action-button.accept:focus{
     background-color: #38A169;
 }
-.total-cookie-consent-banner .button.accept:active{
+.total-cookie-consent-banner .consent-action-button.accept:active{
     background-color: #276749;
 }
 
-.total-cookie-consent-banner .button i{
+.total-cookie-consent-banner .consent-action-button i{
     width: 24px;
     height: 24px;
     display: inline-flex;
@@ -71,7 +72,7 @@
     margin-right: 8px;
 }
 
-.total-cookie-consent-banner .button i svg{
+.total-cookie-consent-banner .consent-action-button i svg{
     width: 16px;
     height: 16px;
 }
@@ -80,11 +81,6 @@ lightswitch-component {
     display: inline-block;
     position: relative;
     box-sizing: border-box;
-    width: 100%;
-    margin-bottom: 16px;
-}
-lightswitch-component:last-of-type{
-    margin-bottom: 0;
 }
 lightswitch-component input {
     position: absolute;
@@ -112,6 +108,7 @@ lightswitch-component input:checked + label i::after {
 lightswitch-component label {
     display: inline-flex;
     flex-flow: row nowrap;
+    align-items: center;
     cursor: pointer;
 }
 lightswitch-component label div{
@@ -122,7 +119,6 @@ lightswitch-component label h3{
     font-size: 18px !important;
     font-weight: 600;
     display: block;
-    margin-bottom: 8px;
     color: #2D3748;
 }
 lightswitch-component label h3 span{
@@ -133,7 +129,7 @@ lightswitch-component label h3 span{
     color: #4A5568;
     font-weight: 400;
 }
-lightswitch-component label p{
+.consent-description p{
     font-size: 14px !important;
     display: block;
     line-height: 1.618;
@@ -187,6 +183,24 @@ lightswitch-component label span {
     line-height: 1.375;
     flex: 1;
     padding: 0.5rem 0;
+}
+
+.consent-button{
+    width: 52px;
+    height: 52px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: top;
+}
+.consent-button svg{
+    color: #4A5568;
+    width: 18px;
+    height: 18px;
+    transition: all 175ms ease-in-out;
+}
+.consent-button[state="open"] svg{
+    transform: rotate(180deg);
 }
 
 @media (min-width: 768px){

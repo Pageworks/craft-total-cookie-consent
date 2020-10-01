@@ -6,45 +6,64 @@
     <h2>{{ "cookie settings"|t }}</h2>
     <div style="padding:32px;">
         {% for type in consentTypes %}
-            <lightswitch-component
-                {% if type.required %}
-                    style="pointer-events: none;"
-                {% endif %} 
-            >
-                <input 
-                    type="checkbox" 
-                    name="{{ type.handle }}" 
-                    id="{{ type.handle }}-input" 
-                    {% if type.defaultOn or type.required %}
-                        checked
-                    {% endif %}
-                    value="1"
-                />
-                <label for="{{ type.handle }}-input">
-                    <i></i>
-                    <div>
-                        <h3>
-                            {{ type.name|t }}
-                            {% if type.required %}
-                                <span>({{ "required"|t }})</span>
-                            {% endif %}
-                        </h3>
+            <div style="display: block;width: 100%;margin-bottom: 16px;">
+                <lightswitch-component
+                    {% if type.required %}
+                        style="pointer-events: none;"
+                    {% endif %} 
+                >
+                    <input 
+                        type="checkbox" 
+                        name="{{ type.handle }}" 
+                        id="{{ type.handle }}-input" 
+                        {% if type.defaultOn or type.required %}
+                            checked
+                        {% endif %}
+                        value="1"
+                    />
+                    <label for="{{ type.handle }}-input">
+                        <i></i>
+                        <div>
+                            <h3>
+                                {{ type.name|t }}
+                                {% if type.required %}
+                                    <span>({{ "required"|t }})</span>
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </label>
+                </lightswitch-component>
+                {% if type.description|length %}
+                    <button type="button" class="consent-button js-{{ type.handle }}" aria-label="{{ 'toggle consent description'|t }}">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-up" class="svg-inline--fa fa-chevron-up fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z"></path></svg>
+                    </button>
+                    <div class="consent-description js-content-{{ type.handle }}" style="display: none;width: 100%;">
                         <p>
                             {{ type.description|t }}
-                            {% if type.url|length %}
-                                <a href="{{ type.url }}">{{ "Read policy"|t }}.</a>
-                            {% endif %}
                         </p>
                     </div>
-                </label>
-            </lightswitch-component>
+                    <script>
+                        var button{{ type.handle }} = document.body.querySelector(".js-{{ type.handle }}");
+                        var description{{ type.handle }} = document.body.querySelector(".js-content-{{ type.handle }}");
+                        button{{ type.handle }}.addEventListener("click", function(){
+                            if (button{{ type.handle }}.getAttribute("state") == "open"){
+                                button{{ type.handle }}.setAttribute("state", "closed");
+                                description{{ type.handle }}.style.display = "none";
+                            }else{
+                                button{{ type.handle }}.setAttribute("state", "open");
+                                description{{ type.handle }}.style.display = "block";
+                            }
+                        });
+                    </script>
+                {% endif %}
+            </div>
         {% endfor %}
         <div style="display: flex;flex-flow: row nowrap; align-items: center;padding-top: 16px;">
-            <button class="button accept" aria-label="{{ 'close cookie consent modal'|t }}" type="submit">
+            <button class="consent-action-button accept" aria-label="{{ 'close cookie consent modal'|t }}" type="submit" >
                 {{ "accept"|t }}
             </button>
             {% if url|length %}
-                <a style="margin-left: 16px;" class="button" href="{{ url }}">
+                <a style="margin-left: 16px;" class="consent-action-button" href="{{ url }}">
                     <i>
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="external-link-alt" class="svg-inline--fa fa-external-link-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"></path></svg>
                     </i>

@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.2.2] - 2020-10-09
+
+### Fixed
+
+- `consent()` variable was always returning an empty array
+
 ## [0.2.1] - 2020-10-01
 
 ### Fixed

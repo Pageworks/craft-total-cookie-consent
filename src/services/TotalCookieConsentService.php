@@ -101,8 +101,8 @@ class TotalCookieConsentService extends Component
         }
         
         $visitorInfo = $this->lookupVisitorInfo();
-        if (isset($visitorInfo['consent'])) {
-            foreach ($visitorInfo['consent'] as $key => $value)
+        if (isset($visitorInfo['visitor_consent'])) {
+            foreach ($visitorInfo['visitor_consent'] as $key => $value)
             {
                 $ret[$key] = $value;
             }

@@ -227,8 +227,15 @@ class TotalCookieConsentService extends Component
             $visitor->save();
             return $visitor;
         } catch (\Exception $e) {
-            Craft::warning("Error with API Fetch: ".$e->getMessage() );
-            return [];
+            Craft::warning("Error with API Fetch: " . $e->getMessage() );
+            return [
+                'siteId' => Craft::$app->sites->getCurrentSite()->id,
+                'visitor_info' => [
+                    'country' => "ERROR",
+                    'region' => "ERROR",
+                ],
+                'ip' => $ip,
+            ];
         }
     }
 

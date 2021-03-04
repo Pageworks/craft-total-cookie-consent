@@ -234,6 +234,7 @@ class TotalCookieConsentService extends Component
                     'country' => "ERROR",
                     'region' => "ERROR",
                 ],
+                "visitor_consent" => null,
                 'ip' => $ip,
             ];
         }
@@ -287,7 +288,7 @@ class TotalCookieConsentService extends Component
         $view = Craft::$app->getView();
         $oldMode = $view->getTemplateMode();
         $view->setTemplateMode(View::TEMPLATE_MODE_CP);
-        if (is_null($visitor) || !empty($visitor) && isset($visitor["visitor_consent"]) && empty($visitor["visitor_consent"]))
+        if (is_null($visitor) || empty($visitor["visitor_consent"]))
         {
             switch ($bannerType)
             {

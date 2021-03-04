@@ -167,9 +167,13 @@ class TotalCookieConsentService extends Component
         }
     }
 
-    public function getBannerType(string $defaultBanner, string $visitorsCountry, string $visitorsRegion, array $countries, array $regions) : string
+    public function getBannerType(string $defaultBanner, $visitorsCountry, $visitorsRegion, array $countries, array $regions) : string
     {
         $bannerType = $defaultBanner;
+
+        if (is_null($visitorsCountry) || $visitorsRegion){
+            return $bannerType;
+        }
         
         foreach ($countries as $country)
         {
@@ -211,24 +215,36 @@ class TotalCookieConsentService extends Component
         try {
             $response = $client->request('GET', 'http://api.ipapi.com/' . $ip . '?access_key=' . $apiKey);
             $data = json_decode($response->getBody(), true);
-            $visitorInfo = [
-                'country' => $data['country_code'],
-                'region' => $data['region_code'],
-            ]; 
-            //Craft::$app->getCache()->add('tcc.' . $ip, json_encode($visitorInfo), 86400);
-            $site = Craft::$app->sites->getCurrentSite();
-            $siteId = $site->id;
-            $visitor = new UserConsent();
-            $visitor->setAttributes([
-                'siteId'=> Craft::$app->sites->getCurrentSite()->id,
-                'visitor_info'=>json_encode($visitorInfo),
-                'ip'=>$ip,
-            ], false);
-            $visitor->save();
-            return $visitor;
+            if (isset($data["country_code"]) && isset($data['region_code']) && !is_null($data["country_code"]) && !is_null($data["region_code"])){
+                $visitorInfo = [
+                    'country' => $data['country_code'],
+                    'region' => $data['region_code'],
+                ];
+                //Craft::$app->getCache()->add('tcc.' . $ip, json_encode($visitorInfo), 86400);
+                $site = Craft::$app->sites->getCurrentSite();
+                $siteId = $site->id;
+                $visitor = new UserConsent();
+                $visitor->setAttributes([
+                    'siteId'=> Craft::$app->sites->getCurrentSite()->id,
+                    'visitor_info'=>json_encode($visitorInfo),
+                    'ip'=>$ip,
+                ], false);
+                $visitor->save();
+            } else {
+                Craft::warning("Error with API Fetch.");
+                $visitor = [
+                    'siteId' => Craft::$app->sites->getCurrentSite()->id,
+                    'visitor_info' => [
+                        'country' => "ERROR",
+                        'region' => "ERROR",
+                    ],
+                    "visitor_consent" => null,
+                    'ip' => $ip,
+                ];
+            }
         } catch (\Exception $e) {
             Craft::warning("Error with API Fetch: " . $e->getMessage() );
-            return [
+            $visitor = [
                 'siteId' => Craft::$app->sites->getCurrentSite()->id,
                 'visitor_info' => [
                     'country' => "ERROR",
@@ -238,6 +254,7 @@ class TotalCookieConsentService extends Component
                 'ip' => $ip,
             ];
         }
+        return $visitor;
     }
 
     public function renderBanner()

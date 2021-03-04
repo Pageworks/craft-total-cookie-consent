@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.2.3] - 2021-03-04
+
+### Fixed
+
+- trying to get property 'visitor_consent' of non-object bug
+
 ## [0.2.2] - 2020-10-09
 
 ### Fixed

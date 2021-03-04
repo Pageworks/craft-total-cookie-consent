@@ -276,7 +276,7 @@ class TotalCookieConsentService extends Component
         $view = Craft::$app->getView();
         $oldMode = $view->getTemplateMode();
         $view->setTemplateMode(View::TEMPLATE_MODE_CP);
-        if (is_null($visitor->visitor_consent))
+        if (empty($visitor->visitor_consent))
         {
             switch ($bannerType)
             {

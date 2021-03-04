@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.2.5] - 2021-03-04
+
+### Fixed
+
+- API error response handling
+
 ## [0.2.4] - 2021-03-04
 
 ### Fixed

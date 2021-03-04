@@ -255,35 +255,39 @@ class TotalCookieConsentService extends Component
         }
         $bannerType = $settings->defaultConsentType;
         $visitor = null;
-        if (!empty($settings->ipapiKey))
-        {
-            $visitor = $this->locateVisitor($settings->ipapiKey);
-            if (!empty($visitor))
+        try{
+            if (!empty($settings->ipapiKey))
             {
-                $countries = [];
-                if (!empty($settings->countriesTable))
+                $visitor = $this->locateVisitor($settings->ipapiKey);
+                if (!empty($visitor))
                 {
-                    $countries = $settings->countriesTable;
+                    $countries = [];
+                    if (!empty($settings->countriesTable))
+                    {
+                        $countries = $settings->countriesTable;
+                    }
+                    $regions = [];
+                    if (!empty($settings->regionsTable))
+                    {
+                        $regions = $settings->regionsTable;
+                    }
+                    $bannerType = $this->getBannerType($settings->defaultConsentType, $visitor->visitor_info['country'], $visitor->visitor_info['region'], $countries, $regions);
                 }
-                $regions = [];
-                if (!empty($settings->regionsTable))
-                {
-                    $regions = $settings->regionsTable;
-                }
-                $bannerType = $this->getBannerType($settings->defaultConsentType, $visitor->visitor_info['country'], $visitor->visitor_info['region'], $countries, $regions);
             }
-        }
-        else
-        {
-            Craft::warning("TCC: No API Key Set");
-            $visitor = $this->lookupVisitorInfo();
+            else
+            {
+                Craft::warning("TCC: No API Key Set");
+                $visitor = $this->lookupVisitorInfo();
+            }
+        } catch (Exception $e) {
+            Craft::warning($e->getMessage());
         }
 
         $template = null;
         $view = Craft::$app->getView();
         $oldMode = $view->getTemplateMode();
         $view->setTemplateMode(View::TEMPLATE_MODE_CP);
-        if (empty($visitor->visitor_consent))
+        if (is_null($visitor) || !empty($visitor) && isset($visitor["visitor_consent"]) && empty($visitor["visitor_consent"]))
         {
             switch ($bannerType)
             {

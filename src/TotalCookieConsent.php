@@ -21,6 +21,8 @@ use craft\events\PluginEvent;
 use craft\web\UrlManager;
 use craft\web\twig\variables\CraftVariable;
 use craft\events\RegisterUrlRulesEvent;
+use craft\utilities\ClearCaches;
+use craft\events\RegisterCacheOptionsEvent;
 
 use yii\base\Event;
 use page8\totalcookieconsent\services\TotalCookieConsentService;
@@ -88,6 +90,22 @@ class TotalCookieConsent extends Plugin
         Craft::$app->view->hook('total-cookie-consent', function(array &$context) {
             return TotalCookieConsent::getInstance()->totalCookieConsentService->renderBanner();
         });
+
+        Event::on(ClearCaches::class, ClearCaches::EVENT_REGISTER_CACHE_OPTIONS,
+            function (RegisterCacheOptionsEvent $event) {
+                $event->options[] = [
+                    'key' => 'cookie-consent-cache',
+                    'label' => "Cookie consent responses",
+                    'action' => function() {
+                        \Yii::$app
+                            ->db
+                            ->createCommand()
+                            ->delete('{{%totalcookieconsent_userconsent}}')
+                            ->execute();
+                    }
+                ];
+            }
+        );
 
         Craft::info(
             Craft::t(

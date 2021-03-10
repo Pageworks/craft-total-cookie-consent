@@ -171,7 +171,7 @@ class TotalCookieConsentService extends Component
     {
         $bannerType = $defaultBanner;
 
-        if (is_null($visitorsCountry) || $visitorsRegion){
+        if (empty($visitorsCountry) || empty($visitorsRegion) || $visitorsCountry === "ERROR" && $visitorsRegion === "ERROR"){
             return $bannerType;
         }
         

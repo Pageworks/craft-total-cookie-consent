@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.2.8] - 2021-03-10
+
+### Added
+
+- "Cookie consent response" cache clearing option
+
 ## [0.2.7] - 2021-03-04
 
 ### Fixed
